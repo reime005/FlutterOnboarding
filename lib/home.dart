@@ -12,10 +12,6 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
   final controller = PageController();
 
   OpenPainter _painter = OpenPainter(3, 1);
-  bool _lights = false;
-  int _index = 0;
-
-  test() {}
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +28,8 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
                     scrollDirection: Axis.horizontal,
                     controller: controller,
                     onPageChanged: (value) {
-                      print(value);
                       _painter.changeIndex(value);
                       notifyListeners();
-                      setState(() {
-                        _index = value;
-                      });
                     },
                     children: [
                       SvgPicture.asset("assets/1.svg",
