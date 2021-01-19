@@ -1,112 +1,50 @@
 import 'dart:developer';
+import 'package:flutter/gestures.dart';
+import 'package:flutter_onboarding/explanation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
+
+final List<ExplanationData> data = [
+  ExplanationData(
+      description: "",
+      title: "A Day at the Park",
+      localImageSrc: "assets/1.svg",
+      backgroundColor: Colors.orange[500]),
+  ExplanationData(
+      description: "",
+      title: "Playing Fetch",
+      localImageSrc: "assets/2.svg",
+      backgroundColor: Colors.orange[700]),
+  ExplanationData(
+      description: "Relaxing Walk",
+      title: "",
+      localImageSrc: "assets/3.svg",
+      backgroundColor: Colors.green[800]),
+  ExplanationData(
+      description: "Flutter",
+      title: "",
+      localImageSrc: "assets/4.svg",
+      backgroundColor: Colors.green[300]),
+];
 
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
 }
 
-class ExplanationPage extends StatelessWidget {
-  final String title;
-  final String description;
-  final String resourceName;
-
-  final List<Widget> extra;
-
-  ExplanationPage(
-      {this.title, this.description, this.resourceName, this.extra});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Column(children: [
-      Expanded(
-          flex: 3,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                SvgPicture.asset(resourceName,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    alignment: Alignment.center),
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.headline1,
-                  textAlign: TextAlign.center,
-                ),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: 32, left: 16, right: 16, bottom: 16),
-                    child: Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      textAlign: TextAlign.center,
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: 32, left: 16, right: 16, bottom: 16),
-                    child: Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      textAlign: TextAlign.center,
-                    )),
-                Padding(
-                    padding: EdgeInsets.only(
-                        top: 32, left: 16, right: 16, bottom: 16),
-                    child: Text(
-                      description,
-                      style: Theme.of(context).textTheme.bodyText1,
-                      textAlign: TextAlign.center,
-                    )),
-              ],
-            ),
-          )),
-      Column(children: extra),
-      Expanded(
-          flex: 1,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              FlatButton(
-                onPressed: () {
-                  /*...*/
-                },
-                child: Text(
-                  "Flat Button",
-                ),
-              ),
-              FlatButton(
-                onPressed: () {
-                  /*...*/
-                },
-                child: Text(
-                  "Flat Button",
-                ),
-              )
-            ],
-          ))
-    ]));
-  }
-}
-
 class _HomePageState extends State<HomePage> with ChangeNotifier {
   final controller = PageController();
 
-  OpenPainter _painter = OpenPainter(3, 1);
+  int _currentIndex = 0;
 
-  test() {
-    return CustomPaint(
-      painter: _painter,
-    );
-  }
+  OpenPainter _painter = OpenPainter(3, 1);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
-      color: Colors.orange[500],
+      color: data[_currentIndex].backgroundColor,
       alignment: Alignment.center,
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -117,47 +55,91 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
                   child: Container(
                       alignment: Alignment.center,
                       child: PageView(
-                        scrollDirection: Axis.horizontal,
-                        controller: controller,
-                        onPageChanged: (value) {
-                          _painter.changeIndex(value);
-                          notifyListeners();
-                        },
-                        children: [
-                          ExplanationPage(
-                            description:
-                                "Adipisicing nulla aliquip ea ad aute qui do. Enim id id dolor dolore laboris tempor commodo qui et do qui dolor dolore. Voluptate ex et enim magna ad aute nisi non commodo esse quis. Aliquip sunt anim duis ea ut exercitation voluptate. Duis officia duis magna anim ex velit id sunt commodo ad amet proident aliqua excepteur.",
-                            resourceName: "assets/1.svg",
-                            title: "Walk your dog",
-                            extra: [this.test()],
-                          ),
-                          ExplanationPage(
-                            description:
-                                "Adipisicing nulla aliquip ea ad aute qui do. Enim id id dolor dolore laboris tempor commodo qui et do qui dolor dolore. Voluptate ex et enim magna ad aute nisi non commodo esse quis. Aliquip sunt anim duis ea ut exercitation voluptate. Duis officia duis magna anim ex velit id sunt commodo ad amet proident aliqua excepteur.",
-                            resourceName: "assets/1.svg",
-                            title: "Walk your dog",
-                            extra: [this.test()],
-                          ),
-                          ExplanationPage(
-                              description:
-                                  "Adipisicing nulla aliquip ea ad aute qui do. Enim id id dolor dolore laboris tempor commodo qui et do qui dolor dolore. Voluptate ex et enim magna ad aute nisi non commodo esse quis. Aliquip sunt anim duis ea ut exercitation voluptate. Duis officia duis magna anim ex velit id sunt commodo ad amet proident aliqua excepteur.",
-                              resourceName: "assets/1.svg",
-                              title: "Walk your dog",
-                              extra: [this.test()]),
-                        ],
-                      )),
-                  flex: 1),
+                          scrollDirection: Axis.horizontal,
+                          controller: controller,
+                          onPageChanged: (value) {
+                            _painter.changeIndex(value);
+                            setState(() {
+                              _currentIndex = value;
+                            });
+                            notifyListeners();
+                          },
+                          children: data
+                              .map((e) => ExplanationPage(data: e))
+                              .toList())),
+                  flex: 5),
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          margin: const EdgeInsets.symmetric(vertical: 24),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: List.generate(data.length,
+                                (index) => createCircle(index: index)),
+                          )),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: _currentIndex == data.length - 1
+                            ? []
+                            : [
+                                FlatButton(
+                                  minWidth: 0.0,
+                                  onPressed: () {
+                                    /*...*/
+                                  },
+                                  child: Text(
+                                    "Skip",
+                                    style:
+                                        Theme.of(context).textTheme.bodyText2,
+                                  ),
+                                ),
+                                Row(
+                                  children: [
+                                    FlatButton(
+                                      padding: EdgeInsets.zero,
+                                      minWidth: 0.0,
+                                      onPressed: () {
+                                        controller.nextPage(
+                                            duration:
+                                                Duration(milliseconds: 200),
+                                            curve: Curves.easeInOut);
+                                      },
+                                      child: Text(
+                                        "Next",
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodyText1,
+                                      ),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_right_alt_sharp,
+                                      color: Theme.of(context).buttonColor,
+                                    )
+                                  ],
+                                )
+                              ],
+                      )
+                    ],
+                  ))
             ],
           ),
-          Padding(
-              padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).size.height * 0.1),
-              child: CustomPaint(
-                painter: _painter,
-              )),
         ],
       ),
     ));
+  }
+
+  createCircle({int index}) {
+    return AnimatedContainer(
+        duration: Duration(milliseconds: 100),
+        margin: EdgeInsets.only(right: 4),
+        height: 5,
+        width: _currentIndex == index ? 15 : 5,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(3)));
   }
 }
 
