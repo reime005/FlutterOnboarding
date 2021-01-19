@@ -8,10 +8,99 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+class ExplanationPage extends StatelessWidget {
+  final String title;
+  final String description;
+  final String resourceName;
+
+  final List<Widget> extra;
+
+  ExplanationPage(
+      {this.title, this.description, this.resourceName, this.extra});
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+        child: Column(children: [
+      Expanded(
+          flex: 3,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                SvgPicture.asset(resourceName,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    alignment: Alignment.center),
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.headline1,
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 32, left: 16, right: 16, bottom: 16),
+                    child: Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      textAlign: TextAlign.center,
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 32, left: 16, right: 16, bottom: 16),
+                    child: Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      textAlign: TextAlign.center,
+                    )),
+                Padding(
+                    padding: EdgeInsets.only(
+                        top: 32, left: 16, right: 16, bottom: 16),
+                    child: Text(
+                      description,
+                      style: Theme.of(context).textTheme.bodyText1,
+                      textAlign: TextAlign.center,
+                    )),
+              ],
+            ),
+          )),
+      Column(children: extra),
+      Expanded(
+          flex: 1,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              FlatButton(
+                onPressed: () {
+                  /*...*/
+                },
+                child: Text(
+                  "Flat Button",
+                ),
+              ),
+              FlatButton(
+                onPressed: () {
+                  /*...*/
+                },
+                child: Text(
+                  "Flat Button",
+                ),
+              )
+            ],
+          ))
+    ]));
+  }
+}
+
 class _HomePageState extends State<HomePage> with ChangeNotifier {
   final controller = PageController();
 
   OpenPainter _painter = OpenPainter(3, 1);
+
+  test() {
+    return CustomPaint(
+      painter: _painter,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,111 +108,55 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
         child: Container(
       color: Colors.orange[500],
       alignment: Alignment.center,
-      child: Column(
+      child: Stack(
+        alignment: Alignment.bottomCenter,
         children: [
-          Expanded(
-              child: Container(
-                  alignment: Alignment.center,
-                  child: PageView(
-                    scrollDirection: Axis.horizontal,
-                    controller: controller,
-                    onPageChanged: (value) {
-                      _painter.changeIndex(value);
-                      notifyListeners();
-                    },
-                    children: [
-                      SvgPicture.asset("assets/1.svg",
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          alignment: Alignment.center),
-                      SvgPicture.asset("assets/1.svg",
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          alignment: Alignment.center),
-                      SvgPicture.asset("assets/1.svg",
-                          height: MediaQuery.of(context).size.height * 0.4,
-                          alignment: Alignment.center),
-                    ],
-                  )),
-              flex: 1),
-          Expanded(
-              child: Padding(
-                  padding: EdgeInsets.only(left: 32, right: 32),
-                  child: Column(
-                    children: [
-                      Expanded(
-                          child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
+          Column(
+            children: [
+              Expanded(
+                  child: Container(
+                      alignment: Alignment.center,
+                      child: PageView(
+                        scrollDirection: Axis.horizontal,
+                        controller: controller,
+                        onPageChanged: (value) {
+                          _painter.changeIndex(value);
+                          notifyListeners();
+                        },
                         children: [
-                          Text(
-                            "Walk your dog",
-                            style: Theme.of(context).textTheme.headline1,
-                            textAlign: TextAlign.center,
+                          ExplanationPage(
+                            description:
+                                "Adipisicing nulla aliquip ea ad aute qui do. Enim id id dolor dolore laboris tempor commodo qui et do qui dolor dolore. Voluptate ex et enim magna ad aute nisi non commodo esse quis. Aliquip sunt anim duis ea ut exercitation voluptate. Duis officia duis magna anim ex velit id sunt commodo ad amet proident aliqua excepteur.",
+                            resourceName: "assets/1.svg",
+                            title: "Walk your dog",
+                            extra: [this.test()],
                           ),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  top: 32, left: 16, right: 16, bottom: 16),
-                              child: Text(
-                                "Reprehenderit ea ut cupidatat proident. Mollit proident eiusmod ad ex cillum officia dolore amet. Cillum amet eiusmod occaecat non non consectetur laborum do. Cupidatat dolore enim officia mollit.",
-                                style: Theme.of(context).textTheme.bodyText1,
-                                textAlign: TextAlign.center,
-                              )),
+                          ExplanationPage(
+                            description:
+                                "Adipisicing nulla aliquip ea ad aute qui do. Enim id id dolor dolore laboris tempor commodo qui et do qui dolor dolore. Voluptate ex et enim magna ad aute nisi non commodo esse quis. Aliquip sunt anim duis ea ut exercitation voluptate. Duis officia duis magna anim ex velit id sunt commodo ad amet proident aliqua excepteur.",
+                            resourceName: "assets/1.svg",
+                            title: "Walk your dog",
+                            extra: [this.test()],
+                          ),
+                          ExplanationPage(
+                              description:
+                                  "Adipisicing nulla aliquip ea ad aute qui do. Enim id id dolor dolore laboris tempor commodo qui et do qui dolor dolore. Voluptate ex et enim magna ad aute nisi non commodo esse quis. Aliquip sunt anim duis ea ut exercitation voluptate. Duis officia duis magna anim ex velit id sunt commodo ad amet proident aliqua excepteur.",
+                              resourceName: "assets/1.svg",
+                              title: "Walk your dog",
+                              extra: [this.test()]),
                         ],
                       )),
-                      Container(
-                          child: CustomPaint(
-                        painter: _painter,
-                      )),
-                      Row(
-                        children: [
-                          // Padding(
-                          //   padding:
-                          //       EdgeInsets.only(top: 32, left: 16, right: 16),
-                          // ),
-                          FlatButton(
-                            onPressed: () {
-                              /*...*/
-                            },
-                            child: Text(
-                              "Flat Button",
-                            ),
-                          ),
-                          FlatButton(
-                            onPressed: () {
-                              /*...*/
-                            },
-                            child: Text(
-                              "Flat Button",
-                            ),
-                          )
-                        ],
-                      )
-                    ],
-                  )),
-              flex: 1),
+                  flex: 1),
+            ],
+          ),
+          Padding(
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height * 0.1),
+              child: CustomPaint(
+                painter: _painter,
+              )),
         ],
       ),
-      // child: GestureDetector(
-      //   behavior: HitTestBehavior.translucent,
-      //   onTap: () {
-      //     print("test");
-      //     log("message");
-      //     setState(() {
-      //       _lights = true;
-      //     });
-      //   },
-      //   child: Column(
-      //     mainAxisAlignment: MainAxisAlignment.center,
-      //     children: <Widget>[
-      //       Container(
-      //         color: Colors.red,
-      //         child: Column(
-      //           mainAxisAlignment: MainAxisAlignment.center,
-      //           children: <Widget>[],
-      //         ),
-      //       )
-      //     ],
-      //   ),
-      // ),
     ));
   }
 }
