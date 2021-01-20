@@ -21,11 +21,15 @@ class App extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
         textTheme: TextTheme(
-          headline1: TextStyle(fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.white),
-          bodyText1: TextStyle(fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.w300),
-          bodyText2: TextStyle(fontSize: 16.0, color: Colors.white, fontWeight: FontWeight.w200),
+          headline1: TextStyle(
+              fontSize: 32.0, fontWeight: FontWeight.bold, color: Colors.white),
+          bodyText1: TextStyle(
+              fontSize: 18.0, color: Colors.white, fontWeight: FontWeight.w300),
+          bodyText2: TextStyle(
+              fontSize: 16.0, height: 1.3, color: Colors.white, fontWeight: FontWeight.w200),
+          button: TextStyle(
+              fontSize: 18, color: Colors.black87, fontWeight: FontWeight.w700),
         ),
-        buttonColor: Colors.white,
         // This makes the visual density adapt to the platform that you run
         // the app on. For desktop platforms, the controls will be smaller and
         // closer together (more dense) than on mobile platforms.

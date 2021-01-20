@@ -1,31 +1,26 @@
-import 'dart:developer';
-import 'package:flutter/gestures.dart';
 import 'package:flutter_onboarding/explanation.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:flutter/material.dart';
 
 final List<ExplanationData> data = [
   ExplanationData(
-      description: "",
+      description:
+          "Labore do ex cillum fugiat anim nulla pariatur est. Elit laboris eiusmod ex occaecat do ea officia esse culpa sit amet occaecat.",
       title: "A Day at the Park",
       localImageSrc: "assets/1.svg",
       backgroundColor: Colors.orange[500]),
   ExplanationData(
-      description: "",
+      description:
+          "Sit ullamco anim deserunt aliquip mollit id. Occaecat labore laboris magna reprehenderit sint in sunt ea.",
       title: "Playing Fetch",
       localImageSrc: "assets/2.svg",
       backgroundColor: Colors.orange[700]),
   ExplanationData(
-      description: "Relaxing Walk",
-      title: "",
+      description:
+          "Eiusmod aliqua laboris duis eiusmod ea ea commodo dolore. Ullamco nulla nostrud et officia.",
+      title: "Relaxing Walk",
       localImageSrc: "assets/3.svg",
       backgroundColor: Colors.green[800]),
-  ExplanationData(
-      description: "Flutter",
-      title: "",
-      localImageSrc: "assets/4.svg",
-      backgroundColor: Colors.green[300]),
 ];
 
 class HomePage extends StatefulWidget {
@@ -33,23 +28,23 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with ChangeNotifier {
+class _HomePageState extends State<HomePage> /*with ChangeNotifier*/ {
   final controller = PageController();
 
   int _currentIndex = 0;
 
-  OpenPainter _painter = OpenPainter(3, 1);
+  // OpenPainter _painter = OpenPainter(3, 1);
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
         child: Container(
+      padding: EdgeInsets.all(16),
       color: data[_currentIndex].backgroundColor,
       alignment: Alignment.center,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Column(
+      child: Column(children: [
+        Expanded(
+          child: Column(
             children: [
               Expanded(
                   child: Container(
@@ -58,16 +53,16 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
                           scrollDirection: Axis.horizontal,
                           controller: controller,
                           onPageChanged: (value) {
-                            _painter.changeIndex(value);
+                            // _painter.changeIndex(value);
                             setState(() {
                               _currentIndex = value;
                             });
-                            notifyListeners();
+                            // notifyListeners();
                           },
                           children: data
                               .map((e) => ExplanationPage(data: e))
                               .toList())),
-                  flex: 5),
+                  flex: 4),
               Expanded(
                   flex: 1,
                   child: Column(
@@ -84,7 +79,28 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: _currentIndex == data.length - 1
-                            ? []
+                            ? [
+                                Expanded(
+                                  child: FlatButton(
+                                      onPressed: () {},
+                                      color: Colors.white,
+                                      materialTapTargetSize:
+                                          MaterialTapTargetSize
+                                              .shrinkWrap, // add this
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          side: BorderSide.none),
+                                      child: Container(
+                                          padding: EdgeInsets.all(24),
+                                          child: Text(
+                                            "Get started",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button,
+                                          ))),
+                                )
+                              ]
                             : [
                                 FlatButton(
                                   minWidth: 0.0,
@@ -115,10 +131,12 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
                                             .bodyText1,
                                       ),
                                     ),
-                                    Icon(
-                                      Icons.arrow_right_alt_sharp,
-                                      color: Theme.of(context).buttonColor,
-                                    )
+                                    Container(
+                                        alignment: Alignment.center,
+                                        child: Icon(
+                                          Icons.arrow_right_alt,
+                                          color: Colors.white,
+                                        ))
                                   ],
                                 )
                               ],
@@ -127,8 +145,8 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
                   ))
             ],
           ),
-        ],
-      ),
+        )
+      ]),
     ));
   }
 
@@ -141,58 +159,4 @@ class _HomePageState extends State<HomePage> with ChangeNotifier {
         decoration: BoxDecoration(
             color: Colors.white, borderRadius: BorderRadius.circular(3)));
   }
-}
-
-class OpenPainter extends CustomPainter with ChangeNotifier {
-  final int maxIndex;
-  int currentIndex = 1;
-
-  void changeIndex(int index) {
-    currentIndex = index + 1;
-    notifyListeners();
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    var paint1 = Paint()
-      ..color = Colors.white
-      ..style = PaintingStyle.fill;
-
-    var radius = 3.0;
-    var gap = radius * 1.75;
-    var barHeight = radius * 2;
-    var barWidth = radius * 7;
-
-    var distance = 0.0;
-    var barRadius = radius * 2;
-
-    for (int i = 1; i <= maxIndex; i++) {
-      var width = i == currentIndex ? barWidth : radius * 2;
-      var height = i == currentIndex ? barHeight : radius * 2;
-
-      // simple calculation to center the canvas
-      if (i == 1) {
-        var fullLength =
-            (maxIndex - 1) * gap + (maxIndex - 1) * barRadius + barWidth;
-        canvas.translate((size.width / 2) - fullLength / 2, 0);
-      }
-
-      canvas.drawRRect(
-          RRect.fromRectAndCorners(
-              Rect.fromLTRB(
-                  distance, -(height / 2), distance + (width), barHeight / 2),
-              bottomLeft: Radius.circular(barRadius),
-              bottomRight: Radius.circular(barRadius),
-              topLeft: Radius.circular(barRadius),
-              topRight: Radius.circular(barRadius)),
-          paint1);
-
-      distance += width + gap;
-    }
-  }
-
-  OpenPainter(this.maxIndex, this.currentIndex) {}
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => true;
 }
