@@ -23,7 +23,7 @@ class ExplanationPage extends StatelessWidget {
         Container(
             margin: EdgeInsets.only(top: 24, bottom: 16),
             child: SvgPicture.asset(data.localImageSrc,
-                height: MediaQuery.of(context).size.height * 0.4,
+                height: MediaQuery.of(context).size.height * 0.33,
                 alignment: Alignment.center)),
         Expanded(
           child: Column(
